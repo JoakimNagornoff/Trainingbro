@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "527534401130",
+    "project_id": "traingbro",
+    "storage_bucket": "traingbro.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:527534401130:android:1ebf21f305ef7e62ce8c13",
+        "android_client_info": {
+          "package_name": "com.trainingbro"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "527534401130-d2v8qssa0tjplcmf7eu1bove70r9aacf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCLUVDWIUH142Y0O-VVYGQrrQ6VL8cP7g8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "527534401130-d2v8qssa0tjplcmf7eu1bove70r9aacf.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
