@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import {connect, ConnectedProps, useSelector} from 'react-redux';
 import TrainingDayModal from '../../components/modals/TrainingDayModal/TrainingDayModal';
+import TraningDayList from '../../components/TrainingDay/TraningDayList';
 import {RootState} from '../../store';
 import {
   hideTrainingDayModal,
@@ -46,6 +47,7 @@ const Home = (props: Props) => {
           <Text>test</Text>
         </TouchableOpacity>
       </View>
+      <TraningDayList route={props.route} navigation={props.navigation} />
     </View>
   );
 };

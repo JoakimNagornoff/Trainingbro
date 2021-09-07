@@ -8,19 +8,21 @@ import {
   TextInput,
 } from 'react-native';
 import {RootState} from '../../../store';
-import {connect, ConnectedProps} from 'react-redux';
+import {connect, ConnectedProps, useDispatch, useSelector} from 'react-redux';
 import {hideTrainingDayModal} from '../../../store/Modals/action/actions';
 import {useState} from 'react';
 import BackButton from '../../BackButton/BackButton';
-
-//sluta här 13/8 lägg till action att lägga upp till firebase
+import {submitToFirebase} from '../../../store/Firebase/action/actions';
 
 const mapStateToProps = (state: RootState) => ({
   modal: state.modals.openTrainingDayModal,
+  store: state.traingDay.data,
+  firebase: state.firebase.fireBasePending,
 });
 
 const mapDispatchToProps = {
   dispatchHideModal: hideTrainingDayModal,
+  dispatchSubmitToFirebase: submitToFirebase,
 };
 
 const connector = connect(mapStateToProps, mapDispatchToProps);
@@ -32,10 +34,11 @@ type PropsFromRedux = {navigation: any; route: any} & ConnectedProps<
 type Props = PropsFromRedux;
 
 const TrainingDayModal = (props: Props) => {
-  const [squat, setSquat] = useState('');
-  const [bench, setBench] = useState('');
-  const [axel, setAxel] = useState('');
-  const [mark, setMark] = useState('');
+  const [squat, setSquat] = useState(null);
+  const [bench, setBench] = useState(null);
+  const [axel, setAxel] = useState(null);
+  const [mark, setMark] = useState(null);
+
   return (
     <Modal transparent={true} visible={props.modal}>
       <View style={{backgroundColor: '#000000aa', flex: 1}}>
@@ -45,7 +48,7 @@ const TrainingDayModal = (props: Props) => {
             margin: 50,
             padding: 40,
             width: 300,
-            height: 350,
+            height: 600,
           }}>
           <BackButton
             onPress={() => {
@@ -89,7 +92,8 @@ const TrainingDayModal = (props: Props) => {
           </View>
           <TouchableOpacity
             onPress={() => {
-              console.log('hello');
+              submitToFirebase(squat, bench, axel, mark);
+              props.dispatchHideModal();
             }}>
             <Text>Lägg till</Text>
           </TouchableOpacity>

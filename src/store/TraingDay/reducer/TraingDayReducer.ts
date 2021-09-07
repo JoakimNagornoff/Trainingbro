@@ -20,6 +20,7 @@ const TraingDayReducer = (
         data: action.payload,
       };
     }
+
     default:
       return state;
   }
