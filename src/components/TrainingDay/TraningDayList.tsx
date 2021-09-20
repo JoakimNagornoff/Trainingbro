@@ -2,10 +2,7 @@ import {firebase} from '@react-native-firebase/auth';
 import React, {Component, useEffect, useState} from 'react';
 import {View, Text, FlatList, TouchableOpacity, StyleSheet} from 'react-native';
 import {connect, ConnectedProps} from 'react-redux';
-import {compose} from 'redux';
 import {ApplicationState, RootState} from '../../store';
-
-//7/9 Lägg till regler till traningdayModal och fixa med firebase actions
 
 const mapStateToProps = (state: RootState) => ({
   traningDay: state.traingDay.data,
@@ -20,11 +17,21 @@ type PropsFromRedux = {navigation: any; route: any} & ConnectedProps<
 >;
 
 type Props = PropsFromRedux;
-function WorkinDay({id}) {
+function WorkinDay({squat, bench, axel, mark}) {
   return (
     <View style={style.traingItem}>
-      <Text>{id}</Text>
-      <Text></Text>
+      <View>
+        <Text>{squat}</Text>
+      </View>
+      <View>
+        <Text>{bench}</Text>
+      </View>
+      <View>
+        <Text>{axel}</Text>
+      </View>
+      <View>
+        <Text>{mark}</Text>
+      </View>
     </View>
   );
 }
@@ -41,6 +48,7 @@ const TraningDayList = (props: Props) => {
         const result = res.docs.map(doc => {
           return {id: doc.id, ...doc.data()};
         });
+
         setData(result);
       });
   }),
@@ -48,9 +56,16 @@ const TraningDayList = (props: Props) => {
   return (
     <View style={style.container}>
       <FlatList
-        data={data}
+        data={Object.values(data)}
         refreshing={false}
-        renderItem={({item}) => <WorkinDay id={item.id} />}
+        renderItem={({item}) => (
+          <WorkinDay
+            squat={item.TraningDay.squat}
+            bench={item.TraningDay.bench}
+            axel={item.TraningDay.axel}
+            mark={item.TraningDay.mark}
+          />
+        )}
         keyExtractor={item => item.id}
       />
     </View>
@@ -59,8 +74,9 @@ const TraningDayList = (props: Props) => {
 
 const style = StyleSheet.create({
   container: {
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: 'space-between',
+
+    flexDirection: 'row',
   },
   traingItem: {
     backgroundColor: '#FFFFFF',
