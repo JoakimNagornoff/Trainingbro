@@ -12,13 +12,14 @@ import {Provider} from 'react-redux';
 import Schedule from '../screens/Schedule/Schedule';
 import {MaterialIcon} from '../components/Icons/Icons';
 import {COLORS} from '../constans';
+import thunkMiddleware from 'redux-thunk';
 
 interface RoutesProps {
   navigation: any;
 }
 const Stack = createNativeStackNavigator();
 
-const store = createStore(rootReducer);
+const store = createStore(rootReducer, applyMiddleware(thunkMiddleware));
 
 store.subscribe(() => {
   console.log('store state:');

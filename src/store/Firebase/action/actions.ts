@@ -6,11 +6,12 @@ export const submitToFirebase = (
   bench: number,
   axel: number,
   mark: number,
+  date: Date,
 ): FirebaseActionTypes => {
   return {
     type: FIREBASE_SUBMIT,
     payload: firestore()
       .collection('TraniningDays')
-      .add({TraningDay: {squat, bench, axel, mark}}),
+      .add({TraningDay: {squat, bench, axel, mark, date}}),
   };
 };

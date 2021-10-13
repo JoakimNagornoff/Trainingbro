@@ -37,14 +37,13 @@ type Props = PropsFromRedux;
 const Home = (props: Props) => {
   return (
     <View>
-      <Text>HOME</Text>
       <TrainingDayModal route={props.route} navigation={props.navigation} />
       <View>
         <TouchableOpacity
           onPress={() => {
             props.dispatchOpen();
           }}>
-          <Text>test</Text>
+          <Text>HÄR</Text>
         </TouchableOpacity>
       </View>
       <TraningDayList route={props.route} navigation={props.navigation} />

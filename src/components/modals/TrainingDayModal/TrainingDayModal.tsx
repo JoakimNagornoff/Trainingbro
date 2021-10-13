@@ -15,6 +15,8 @@ import BackButton from '../../BackButton/BackButton';
 import {submitToFirebase} from '../../../store/Firebase/action/actions';
 import {MaterialIcon} from '../../Icons/Icons';
 import {COLORS} from '../../../constans';
+import DateTimePicker from '@react-native-community/datetimepicker';
+import formatDate from '../../../constans/formateDate';
 
 const mapStateToProps = (state: RootState) => ({
   modal: state.modals.openTrainingDayModal,
@@ -46,11 +48,20 @@ const TrainingDayModal = (props: Props) => {
   const [isAxel, setIsAxel] = useState(true);
   const [isMark, setIsMark] = useState(true);
 
+  const [showDate, setShowDate] = useState(false);
+  const [date, setDate] = useState(new Date());
+
+  const onChange = (event, SelectedDate) => {
+    setShowDate(!showDate);
+    const currentDate = SelectedDate || date;
+    setDate(currentDate);
+  };
   //reset state när man stänger ner modalem
   const checkBoxHandler = () => {
-    submitToFirebase(squat, bench, axel, mark);
+    submitToFirebase(squat, bench, axel, mark, date);
     props.dispatchHideModal();
   };
+
   return (
     <Modal transparent={true} visible={props.modal}>
       <View style={{backgroundColor: '#000000aa', flex: 1}}>
@@ -67,6 +78,7 @@ const TrainingDayModal = (props: Props) => {
               props.dispatchHideModal();
             }}
           />
+
           <Text style={{fontSize: 20, padding: 10}}>Lägg till träningsdag</Text>
           <View>
             <View style={style.inputContainer}>
@@ -138,6 +150,7 @@ const TrainingDayModal = (props: Props) => {
                       ? 'check-circle-outline'
                       : 'checkbox-blank-circle-outline'
                   }
+                  color={COLORS.black}
                 />
               </TouchableOpacity>
             </View>
@@ -161,9 +174,24 @@ const TrainingDayModal = (props: Props) => {
                       ? 'check-circle-outline'
                       : 'checkbox-blank-circle-outline'
                   }
+                  color={COLORS.black}
                 />
               </TouchableOpacity>
             </View>
+            <View style={style.inputContainer}>
+              <TouchableOpacity
+                onPress={() => {
+                  setShowDate(!showDate);
+                }}>
+                <MaterialIcon
+                  size="large"
+                  name={'calendar-clock'}
+                  color={COLORS.black}
+                />
+              </TouchableOpacity>
+              <Text>{formatDate(date)}</Text>
+            </View>
+            {showDate && <DateTimePicker value={date} onChange={onChange} />}
           </View>
           <TouchableOpacity
             onPress={() => {

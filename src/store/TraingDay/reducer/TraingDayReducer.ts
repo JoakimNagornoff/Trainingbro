@@ -3,6 +3,7 @@ import {
   TraningDayActionTypes,
   TraingDay,
   TraingDayState,
+  UPDATE_REDUX_STORE,
 } from '../action/types';
 
 const initialState: TraingDayState = {
@@ -15,6 +16,12 @@ const TraingDayReducer = (
 ): TraingDayState => {
   switch (action.type) {
     case ADD_TRAINING_DAY: {
+      return {
+        ...state,
+        data: action.payload,
+      };
+    }
+    case UPDATE_REDUX_STORE: {
       return {
         ...state,
         data: action.payload,

@@ -1,14 +1,19 @@
-import {firebase} from '@react-native-firebase/auth';
-import React, {Component, useEffect, useState} from 'react';
+import firebase from '@react-native-firebase/app';
+import '@react-native-firebase/auth';
+
+import React, {useEffect} from 'react';
 import {View, Text, FlatList, TouchableOpacity, StyleSheet} from 'react-native';
 import {connect, ConnectedProps} from 'react-redux';
-import {ApplicationState, RootState} from '../../store';
+import {RootState} from '../../store';
+import {UpdateReduxData} from '../../store/TraingDay/action/actions';
 
 const mapStateToProps = (state: RootState) => ({
   traningDay: state.traingDay.data,
 });
 
-const mapDispatchToProps = {};
+const mapDispatchToProps = {
+  dispatch: UpdateReduxData,
+};
 
 const connector = connect(mapStateToProps, mapDispatchToProps);
 
@@ -37,8 +42,6 @@ function WorkinDay({squat, bench, axel, mark}) {
 }
 
 const TraningDayList = (props: Props) => {
-  const [data, setData] = useState([]);
-
   useEffect(() => {
     firebase
       .firestore()
@@ -48,24 +51,23 @@ const TraningDayList = (props: Props) => {
         const result = res.docs.map(doc => {
           return {id: doc.id, ...doc.data()};
         });
+        //setItems([...result]);
+        //props.dispatch(result);
 
-        setData(result);
+        props.dispatch([...result]);
+        // props.dispatch(result);
       });
-  }),
-    [data];
+  }, []);
+
+  //slutat här få ut rätt items från storen
+
   return (
     <View style={style.container}>
       <FlatList
-        data={Object.values(data)}
-        refreshing={false}
-        renderItem={({item}) => (
-          <WorkinDay
-            squat={item.TraningDay.squat}
-            bench={item.TraningDay.bench}
-            axel={item.TraningDay.axel}
-            mark={item.TraningDay.mark}
-          />
-        )}
+        data={Object.values(props.traningDay)}
+        renderItem={({item}) => {
+          console.log(item.id, 'items');
+        }}
         keyExtractor={item => item.id}
       />
     </View>
