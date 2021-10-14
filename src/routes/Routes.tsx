@@ -46,7 +46,7 @@ const Tab = createBottomTabNavigator();
 export const BottonTabNavigator = (props: any) => {
   return (
     <Tab.Navigator
-      tabBarOptions={{
+      screenOptions={{
         style: {
           height: 65,
         },

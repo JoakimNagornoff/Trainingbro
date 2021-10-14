@@ -3,7 +3,7 @@ export const UPDATE_REDUX_STORE = 'UPDATE_REDUX_STORE';
 
 export interface TraingDay {
   id: string;
-  trainingday: {
+  TraningDay: {
     squat: number;
     bench: number;
     axel: number;

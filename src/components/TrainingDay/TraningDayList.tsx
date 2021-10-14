@@ -1,4 +1,5 @@
 import firebase from '@react-native-firebase/app';
+import firestore from '@react-native-firebase/firestore';
 import '@react-native-firebase/auth';
 
 import React, {useEffect} from 'react';
@@ -51,23 +52,22 @@ const TraningDayList = (props: Props) => {
         const result = res.docs.map(doc => {
           return {id: doc.id, ...doc.data()};
         });
-        //setItems([...result]);
-        //props.dispatch(result);
-
-        props.dispatch([...result]);
-        // props.dispatch(result);
+        props.dispatch(result);
       });
   }, []);
-
-  //slutat här få ut rätt items från storen
 
   return (
     <View style={style.container}>
       <FlatList
-        data={Object.values(props.traningDay)}
-        renderItem={({item}) => {
-          console.log(item.id, 'items');
-        }}
+        data={props.traningDay}
+        renderItem={({item}) => (
+          <WorkinDay
+            squat={item.TraningDay.squat}
+            bench={item.TraningDay.bench}
+            axel={item.TraningDay.axel}
+            mark={item.TraningDay.mark}
+          />
+        )}
         keyExtractor={item => item.id}
       />
     </View>
@@ -87,6 +87,7 @@ const style = StyleSheet.create({
     marginHorizontal: 16,
     height: 80,
     width: 360,
+    backgroundcolor: 'gray',
   },
 });
 
