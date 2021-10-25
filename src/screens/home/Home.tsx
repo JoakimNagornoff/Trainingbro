@@ -16,8 +16,6 @@ import {
   showTrainigdayModal,
 } from '../../store/Modals/action/actions';
 
-//SLUTAT HÄR koppla ihop redux som const istället för class
-
 const mapStateToProps = (state: RootState) => ({
   modal: state.modals.openTrainingDayModal,
 });

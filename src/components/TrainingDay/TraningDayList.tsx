@@ -1,12 +1,13 @@
 import firebase from '@react-native-firebase/app';
-import firestore from '@react-native-firebase/firestore';
+
 import '@react-native-firebase/auth';
 
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {View, Text, FlatList, TouchableOpacity, StyleSheet} from 'react-native';
 import {connect, ConnectedProps} from 'react-redux';
 import {RootState} from '../../store';
 import {UpdateReduxData} from '../../store/TraingDay/action/actions';
+import ActivityIndicator from '../ActivityIndicator/ActivityIndicator';
 
 const mapStateToProps = (state: RootState) => ({
   traningDay: state.traingDay.data,
@@ -43,18 +44,31 @@ function WorkinDay({squat, bench, axel, mark}) {
 }
 
 const TraningDayList = (props: Props) => {
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
-    firebase
+    const subscriber = firebase
       .firestore()
       .collection('TraniningDays')
-      .get()
-      .then(res => {
-        const result = res.docs.map(doc => {
-          return {id: doc.id, ...doc.data()};
+      .onSnapshot(querySnapShot => {
+        const traningDays = [];
+
+        querySnapShot.forEach(documentSnapShot => {
+          traningDays.push({
+            id: documentSnapShot.id,
+            ...documentSnapShot.data(),
+          });
         });
-        props.dispatch(result);
+        setLoading(false);
+        props.dispatch(traningDays);
+        console.log('change');
       });
+    return () => subscriber();
   }, []);
+
+  if (loading) {
+    return <ActivityIndicator />;
+  }
 
   return (
     <View style={style.container}>
@@ -87,7 +101,6 @@ const style = StyleSheet.create({
     marginHorizontal: 16,
     height: 80,
     width: 360,
-    backgroundcolor: 'gray',
   },
 });
 

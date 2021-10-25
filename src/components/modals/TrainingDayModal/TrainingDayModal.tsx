@@ -12,21 +12,28 @@ import {connect, ConnectedProps, useDispatch, useSelector} from 'react-redux';
 import {hideTrainingDayModal} from '../../../store/Modals/action/actions';
 import {useState} from 'react';
 import BackButton from '../../BackButton/BackButton';
-import {submitToFirebase} from '../../../store/Firebase/action/actions';
+
 import {MaterialIcon} from '../../Icons/Icons';
 import {COLORS} from '../../../constans';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import formatDate from '../../../constans/formateDate';
+import {
+  addTraningDay,
+  resetStore,
+} from '../../../store/TraingDay/action/actions';
+import ActivityIndicatorLoad from '../../ActivityIndicator/ActivityIndicator';
+import {firebase} from '@react-native-firebase/firestore';
 
 const mapStateToProps = (state: RootState) => ({
   modal: state.modals.openTrainingDayModal,
   store: state.traingDay.data,
-  firebase: state.firebase.fireBasePending,
+  traningDay: state.traingDay.data,
 });
 
 const mapDispatchToProps = {
   dispatchHideModal: hideTrainingDayModal,
-  dispatchSubmitToFirebase: submitToFirebase,
+
+  dispatchAddNewDay: addTraningDay,
 };
 
 const connector = connect(mapStateToProps, mapDispatchToProps);
@@ -56,9 +63,11 @@ const TrainingDayModal = (props: Props) => {
     const currentDate = SelectedDate || date;
     setDate(currentDate);
   };
-  //reset state när man stänger ner modalem
+  //slutat här: lägg till dispatch add traning day
   const checkBoxHandler = () => {
-    submitToFirebase(squat, bench, axel, mark, date);
+    const createdAt = firebase.firestore.Timestamp.fromDate(new Date());
+    console.log('createdAT', createdAt);
+    addTraningDay(squat, bench, axel, mark, date);
     props.dispatchHideModal();
   };
 
