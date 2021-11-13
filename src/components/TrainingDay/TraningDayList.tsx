@@ -99,7 +99,7 @@ const style = StyleSheet.create({
     padding: 20,
     marginVertical: 8,
     marginHorizontal: 16,
-    height: 80,
+    height: 100,
     width: 360,
   },
 });

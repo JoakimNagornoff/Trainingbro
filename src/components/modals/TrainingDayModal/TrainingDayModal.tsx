@@ -21,8 +21,6 @@ import {
   addTraningDay,
   resetStore,
 } from '../../../store/TraingDay/action/actions';
-import ActivityIndicatorLoad from '../../ActivityIndicator/ActivityIndicator';
-import {firebase} from '@react-native-firebase/firestore';
 
 const mapStateToProps = (state: RootState) => ({
   modal: state.modals.openTrainingDayModal,
@@ -32,7 +30,6 @@ const mapStateToProps = (state: RootState) => ({
 
 const mapDispatchToProps = {
   dispatchHideModal: hideTrainingDayModal,
-
   dispatchAddNewDay: addTraningDay,
 };
 
@@ -50,11 +47,6 @@ const TrainingDayModal = (props: Props) => {
   const [axel, setAxel] = useState(null);
   const [mark, setMark] = useState(null);
 
-  const [isSquat, setIsquat] = useState(true);
-  const [isBench, setIsBench] = useState(true);
-  const [isAxel, setIsAxel] = useState(true);
-  const [isMark, setIsMark] = useState(true);
-
   const [showDate, setShowDate] = useState(false);
   const [date, setDate] = useState(new Date());
 
@@ -63,11 +55,15 @@ const TrainingDayModal = (props: Props) => {
     const currentDate = SelectedDate || date;
     setDate(currentDate);
   };
-  //slutat här: lägg till dispatch add traning day
+  //Change function later for IF succes set everything to null
   const checkBoxHandler = () => {
-    const createdAt = firebase.firestore.Timestamp.fromDate(new Date());
-    console.log('createdAT', createdAt);
+    // const createdAt = firebase.firestore.Timestamp.fromDate(new Date());
+    // console.log('createdAT', createdAt);
     addTraningDay(squat, bench, axel, mark, date);
+    setSquat(null);
+    setBench(null);
+    setAxel(null);
+    setMark(null);
     props.dispatchHideModal();
   };
 
@@ -86,6 +82,12 @@ const TrainingDayModal = (props: Props) => {
             onPress={() => {
               props.dispatchHideModal();
             }}
+            style2={{
+              height: 30,
+              width: 30,
+              alignSelf: 'flex-end',
+              color: 'black',
+            }}
           />
 
           <Text style={{fontSize: 20, padding: 10}}>Lägg till träningsdag</Text>
@@ -97,23 +99,8 @@ const TrainingDayModal = (props: Props) => {
                 keyboardType={'numeric'}
                 placeholder="Max vikt"
                 value={squat}
-                editable={isSquat}
                 onChangeText={text => setSquat(text)}
               />
-              <TouchableOpacity
-                onPress={() => {
-                  setIsquat(!isSquat);
-                }}>
-                <MaterialIcon
-                  size="large"
-                  name={
-                    isSquat
-                      ? 'check-circle-outline'
-                      : 'checkbox-blank-circle-outline'
-                  }
-                  color={COLORS.black}
-                />
-              </TouchableOpacity>
             </View>
             <View style={style.inputContainer}>
               <Text>BENCH</Text>
@@ -124,20 +111,6 @@ const TrainingDayModal = (props: Props) => {
                 value={bench}
                 onChangeText={text => setBench(text)}
               />
-              <TouchableOpacity
-                onPress={() => {
-                  setIsBench(!isBench);
-                }}>
-                <MaterialIcon
-                  size="large"
-                  name={
-                    isBench
-                      ? 'check-circle-outline'
-                      : 'checkbox-blank-circle-outline'
-                  }
-                  color={COLORS.black}
-                />
-              </TouchableOpacity>
             </View>
             <View style={style.inputContainer}>
               <Text>AXEL</Text>
@@ -148,20 +121,6 @@ const TrainingDayModal = (props: Props) => {
                 value={axel}
                 onChangeText={text => setAxel(text)}
               />
-              <TouchableOpacity
-                onPress={() => {
-                  setIsAxel(!isAxel);
-                }}>
-                <MaterialIcon
-                  size="large"
-                  name={
-                    isAxel
-                      ? 'check-circle-outline'
-                      : 'checkbox-blank-circle-outline'
-                  }
-                  color={COLORS.black}
-                />
-              </TouchableOpacity>
             </View>
             <View style={style.inputContainer}>
               <Text>MARK</Text>
@@ -172,20 +131,6 @@ const TrainingDayModal = (props: Props) => {
                 value={mark}
                 onChangeText={text => setMark(text)}
               />
-              <TouchableOpacity
-                onPress={() => {
-                  setIsMark(!isMark);
-                }}>
-                <MaterialIcon
-                  size="large"
-                  name={
-                    isMark
-                      ? 'check-circle-outline'
-                      : 'checkbox-blank-circle-outline'
-                  }
-                  color={COLORS.black}
-                />
-              </TouchableOpacity>
             </View>
             <View style={style.inputContainer}>
               <TouchableOpacity
@@ -205,8 +150,14 @@ const TrainingDayModal = (props: Props) => {
           <TouchableOpacity
             onPress={() => {
               checkBoxHandler();
-            }}>
-            <Text>Lägg till</Text>
+            }}
+            disabled={!Boolean(squat && mark && axel && bench)}
+            style={
+              !Boolean(squat && mark && axel && bench)
+                ? style.disabled
+                : style.addButton
+            }>
+            <Text style={style.addButtonText}>Lägg till</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -231,6 +182,32 @@ const style = StyleSheet.create({
     alignItems: 'center',
   },
   inputContainerText: {},
+  disabled: {
+    marginTop: 10,
+    elevation: 8,
+    backgroundColor: 'gray',
+    borderRadius: 10,
+    paddingVertical: 10,
+    paddingHorizontal: 12,
+  },
+  addButton: {
+    marginTop: 10,
+    elevation: 8,
+    backgroundColor: '#009688',
+    borderRadius: 10,
+    paddingVertical: 10,
+    paddingHorizontal: 12,
+  },
+  addButtonText: {
+    textAlign: 'center',
+    color: 'white',
+  },
+  backButton: {
+    height: 30,
+    width: 30,
+    justifyContent: 'flex-end',
+    color: 'black',
+  },
 });
 
 export default connector(TrainingDayModal);

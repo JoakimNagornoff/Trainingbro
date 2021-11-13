@@ -40,13 +40,29 @@ const Home = (props: Props) => {
         <TouchableOpacity
           onPress={() => {
             props.dispatchOpen();
-          }}>
-          <Text>HÄR</Text>
+          }}
+          style={style.addButton}>
+          <Text style={style.addButtonText}>HÄR</Text>
         </TouchableOpacity>
       </View>
       <TraningDayList route={props.route} navigation={props.navigation} />
     </View>
   );
 };
+
+const style = StyleSheet.create({
+  addButton: {
+    marginTop: 10,
+    elevation: 8,
+    backgroundColor: '#009688',
+    borderRadius: 10,
+    paddingVertical: 10,
+    paddingHorizontal: 12,
+  },
+  addButtonText: {
+    textAlign: 'center',
+    color: 'white',
+  },
+});
 
 export default connector(Home);
